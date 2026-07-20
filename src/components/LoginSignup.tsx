@@ -210,7 +210,7 @@ export default function LoginSignup({ onSuccess }: LoginSignupProps) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g., DrDonut"
+              placeholder="e.g., DrDonutt"
               className="w-full bg-[#07040b]/60 text-white placeholder-zinc-700 border-2 border-[#1a1126] focus:border-[#0055ff] rounded-xl py-3 px-4 text-xs font-bold outline-none transition-all"
             />
           </div>

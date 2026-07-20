@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { PlayerStats } from "../types";
 
-const FAMOUS_LIST = ["DrDonut", "Bionic", "LoverFella", "Preston"];
+const FAMOUS_LIST = ["DrDonutt", "Bionic", "LoverFella", "Preston"];
 
 export default function PlayerTracker() {
   const [username, setUsername] = useState<string>("");
@@ -24,9 +24,9 @@ export default function PlayerTracker() {
   const [playerData, setPlayerData] = useState<PlayerStats | null>(null);
   const [error, setError] = useState<string>("");
 
-  // Load DrDonut initially as a beautiful default
+  // Load DrDonutt initially as a beautiful default
   useEffect(() => {
-    fetchStats("DrDonut");
+    fetchStats("DrDonutt");
   }, []);
 
   const fetchStats = async (nameToFetch: string) => {
@@ -71,7 +71,7 @@ export default function PlayerTracker() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g., DrDonut"
+              placeholder="e.g., DrDonutt"
               className="w-full bg-[#07040b]/60 text-white placeholder-zinc-600 border-2 border-[#1a1126] focus:border-[#0055ff] rounded-xl py-3 pl-11 pr-4 text-xs font-bold outline-none transition-all"
             />
             <Search className="w-4 h-4 text-zinc-500 absolute left-4 top-3.5" />

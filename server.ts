@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json());
 
@@ -36,6 +36,19 @@ function getGeminiAI(): GoogleGenAI | null {
 
 // Hardcoded famous DonutSMP players for high-fidelity fallback
 const FAMOUS_PLAYERS: Record<string, any> = {
+  drdonutt: {
+    username: "DrDonutt",
+    uuid: "f68b446a-77ff-4682-a0e2-632b69cb6e11", // Owner/Admin
+    playtime: "1,450 hours",
+    kills: 3421,
+    deaths: 412,
+    kdr: 8.3,
+    balance: "$2.4B",
+    faction: "Staff",
+    rank: "OWNER",
+    status: "Online",
+    summary: "The creator and head administrator of DonutSMP. Known for setting up custom mechanics and hosting massive server-wide events.",
+  },
   drdonut: {
     username: "DrDonut",
     uuid: "f68b446a-77ff-4682-a0e2-632b69cb6e11", // Owner/Admin
