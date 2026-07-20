@@ -48,3 +48,13 @@ export interface FarmPreset {
   buildingDifficulty: "Easy" | "Medium" | "Hard" | "Expert";
   spawnerCount?: number;
 }
+
+export interface ChatMessage {
+  id: string;
+  sender: string;
+  rank: string; // "OWNER" | "MEDIA" | "VIP+" | "MVP" | "PLAYER" etc
+  text: string;
+  timestamp: string;
+  isUser?: boolean;
+}
+

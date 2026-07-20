@@ -23,6 +23,7 @@ import MapArtCalculator from "./components/MapArtCalculator";
 import FarmCalculator from "./components/FarmCalculator";
 import PlayerTracker from "./components/PlayerTracker";
 import LoginSignup from "./components/LoginSignup";
+import LiveChat from "./components/LiveChat";
 
 // Blue Pixel Donut matching the theme
 const DonutLogoSVG = () => (
@@ -182,194 +183,201 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
-        <AnimatePresence mode="wait">
-          
-          {/* DASHBOARD TAB */}
-          {activeTab === "dashboard" && (
-            <motion.div
-              key="dashboard"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-8"
-            >
-              {/* Hero Banner */}
-              <div className="bg-gradient-to-br from-[#120b18] to-[#040106] border-4 border-[#0055ff] rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-2xl neon-glow-blue">
-                <div className="absolute top-[-50px] right-[-50px] opacity-[0.04] pointer-events-none hidden lg:block">
-                  <Server className="w-96 h-96 text-[#0055ff]" />
+      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10 flex flex-col lg:flex-row gap-6 xl:gap-8 items-start">
+        
+        {/* Live Minecraft Server Chat (Left Side) */}
+        <LiveChat user={user} />
+
+        {/* Actionable Content Tabs (Right Side) */}
+        <div className="flex-1 w-full min-w-0">
+          <AnimatePresence mode="wait">
+            
+            {/* DASHBOARD TAB */}
+            {activeTab === "dashboard" && (
+              <motion.div
+                key="dashboard"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-8"
+              >
+                {/* Hero Banner */}
+                <div className="bg-gradient-to-br from-[#120b18] to-[#040106] border-4 border-[#0055ff] rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-2xl neon-glow-blue">
+                  <div className="absolute top-[-50px] right-[-50px] opacity-[0.04] pointer-events-none hidden lg:block">
+                    <Server className="w-96 h-96 text-[#0055ff]" />
+                  </div>
+                  
+                  <div className="space-y-5 relative z-10 max-w-3xl">
+                    <span className="text-xs font-pixel bg-gradient-to-r from-[#0055ff] to-[#00d5ff] text-white border-2 border-[#00d5ff]/40 rounded-lg px-3 py-1.5 uppercase shadow-md tracking-wider inline-block">
+                      ⚡ SURVIVAL TOOLKIT
+                    </span>
+                    
+                    <h2 className="text-3xl md:text-5xl font-black text-white font-pixel tracking-wide uppercase leading-tight">
+                      Donut<span className="text-[#0055ff] neon-text-blue">calc</span>
+                    </h2>
+                    
+                    <p className="text-sm md:text-base text-zinc-300 leading-relaxed max-w-2xl font-medium">
+                      A helper tool designed to calculate Map Art materials, compute farm crop & spawner profits, and analyze player statistics.
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-4 pt-4">
+                      <button
+                        onClick={() => setActiveTab("mapart")}
+                        className="px-6 py-3.5 bg-gradient-to-r from-[#0055ff] to-[#00d5ff] hover:scale-105 hover:from-[#3377ff] hover:to-[#33e0ff] text-zinc-950 font-pixel text-xs font-bold rounded-xl border-b-4 border-r-4 border-zinc-950 active:border-b-0 active:border-r-0 active:translate-y-1 transition-all cursor-pointer shadow-lg flex items-center gap-2"
+                      >
+                        <span>MAP ART CALCULATOR</span>
+                        <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("farms")}
+                        className="px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 font-pixel text-xs font-bold rounded-xl border-b-4 border-r-4 border-zinc-950 active:border-b-0 active:border-r-0 active:translate-y-1 transition-all border-2 border-[#221733] cursor-pointer flex items-center gap-2"
+                      >
+                        <span>FARM CALCULATOR</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Live server info panel */}
+                  <div className="mt-8 pt-8 border-t border-[#221733] grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-lg bg-[#0055ff]/10 flex items-center justify-center text-sky-400 border border-[#0055ff]/20">
+                        <Server className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">SERVER IP ADDRESS</span>
+                        <span className="text-sm font-black text-white font-mono tracking-wider">play.donutsmp.net</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 border border-amber-500/20">
+                        <ShoppingBag className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">STORE ADDRESS</span>
+                        <a href="https://store.donutsmp.net/" target="_blank" rel="noopener noreferrer" className="text-sm font-black text-sky-400 hover:text-sky-300 font-mono tracking-wider flex items-center gap-1 hover:underline">
+                          store.donutsmp.net <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                        <Coins className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">MARKET COMMISSION</span>
+                        <span className="text-sm font-black text-emerald-400 font-mono tracking-wider">0.0% TAX (FREE TRADE)</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="space-y-5 relative z-10 max-w-3xl">
-                  <span className="text-xs font-pixel bg-gradient-to-r from-[#0055ff] to-[#00d5ff] text-white border-2 border-[#00d5ff]/40 rounded-lg px-3 py-1.5 uppercase shadow-md tracking-wider inline-block">
-                    ⚡ SURVIVAL TOOLKIT
-                  </span>
+
+                {/* Bento Grid Features */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   
-                  <h2 className="text-3xl md:text-5xl font-black text-white font-pixel tracking-wide uppercase leading-tight">
-                    Donut<span className="text-[#0055ff] neon-text-blue">calc</span>
-                  </h2>
-                  
-                  <p className="text-sm md:text-base text-zinc-300 leading-relaxed max-w-2xl font-medium">
-                    A helper tool designed to calculate Map Art materials, compute farm crop & spawner profits, and analyze player statistics.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <button
-                      onClick={() => setActiveTab("mapart")}
-                      className="px-6 py-3.5 bg-gradient-to-r from-[#0055ff] to-[#00d5ff] hover:scale-105 hover:from-[#3377ff] hover:to-[#33e0ff] text-zinc-950 font-pixel text-xs font-bold rounded-xl border-b-4 border-r-4 border-zinc-950 active:border-b-0 active:border-r-0 active:translate-y-1 transition-all cursor-pointer shadow-lg flex items-center gap-2"
-                    >
-                      <span>MAP ART CALCULATOR</span>
-                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                    </button>
+                  {/* Spawner Profits Guide */}
+                  <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border-2 border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all">
+                      <Sprout className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Farm Calculator</h3>
+                    <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
+                      Farming spawners is the fastest path to server wealth. Use the profits calculator to find materials checklists and see exactly how fast you generate profit.
+                    </p>
                     <button
                       onClick={() => setActiveTab("farms")}
-                      className="px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 font-pixel text-xs font-bold rounded-xl border-b-4 border-r-4 border-zinc-950 active:border-b-0 active:border-r-0 active:translate-y-1 transition-all border-2 border-[#221733] cursor-pointer flex items-center gap-2"
+                      className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
                     >
-                      <span>FARM CALCULATOR</span>
+                      Open Farm Calculator <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
+
+                  {/* Map Art Masterclass */}
+                  <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
+                    <div className="w-12 h-12 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 border-2 border-sky-500/20 group-hover:bg-sky-500/20 transition-all">
+                      <Paintbrush className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Map Art Calculator</h3>
+                    <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
+                      Create custom 1x1 to 4x4 map artwork. Load actual DonutSMP artwork templates, match pixels to actual blocks, and export accurate material checklists.
+                    </p>
+                    <button
+                      onClick={() => setActiveTab("mapart")}
+                      className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
+                    >
+                      Load Map Art Calculator <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+
+                  {/* Player Standings */}
+                  <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
+                    <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 border-2 border-purple-500/20 group-hover:bg-purple-500/20 transition-all">
+                      <User className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Player Tracker</h3>
+                    <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
+                      Analyze player statistics, search custom ranks, and display high-definition 3D skin previews.
+                    </p>
+                    <button
+                      onClick={() => setActiveTab("players")}
+                      className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
+                    >
+                      Open Player Tracker <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+
                 </div>
 
-                {/* Live server info panel */}
-                <div className="mt-8 pt-8 border-t border-[#221733] grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-lg bg-[#0055ff]/10 flex items-center justify-center text-sky-400 border border-[#0055ff]/20">
-                      <Server className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">SERVER IP ADDRESS</span>
-                      <span className="text-sm font-black text-white font-mono tracking-wider">play.donutsmp.net</span>
-                    </div>
-                  </div>
 
-                  <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 border border-amber-500/20">
-                      <ShoppingBag className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">STORE ADDRESS</span>
-                      <a href="https://store.donutsmp.net/" target="_blank" rel="noopener noreferrer" className="text-sm font-black text-sky-400 hover:text-sky-300 font-mono tracking-wider flex items-center gap-1 hover:underline">
-                        store.donutsmp.net <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
+              </motion.div>
+            )}
 
-                  <div className="bg-[#09060f]/80 p-4 rounded-2xl border-2 border-[#221733] flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-                      <Coins className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">MARKET COMMISSION</span>
-                      <span className="text-sm font-black text-emerald-400 font-mono tracking-wider">0.0% TAX (FREE TRADE)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* MAP ART CALCULATOR */}
+            {activeTab === "mapart" && (
+              <motion.div
+                key="mapart"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2 }}
+              >
+                <MapArtCalculator 
+                  initialMapArt={selectedMapArt}
+                  onClearInitial={() => setSelectedMapArt(null)}
+                />
+              </motion.div>
+            )}
 
-              {/* Bento Grid Features */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Spawner Profits Guide */}
-                <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border-2 border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all">
-                    <Sprout className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Farm Calculator</h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
-                    Farming spawners is the fastest path to server wealth. Use the profits calculator to find materials checklists and see exactly how fast you generate profit.
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("farms")}
-                    className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
-                  >
-                    Open Farm Calculator <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
+            {/* FARM ROI CALCULATOR */}
+            {activeTab === "farms" && (
+              <motion.div
+                key="farms"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FarmCalculator />
+              </motion.div>
+            )}
 
-                {/* Map Art Masterclass */}
-                <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
-                  <div className="w-12 h-12 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 border-2 border-sky-500/20 group-hover:bg-sky-500/20 transition-all">
-                    <Paintbrush className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Map Art Calculator</h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
-                    Create custom 1x1 to 4x4 map artwork. Load actual DonutSMP artwork templates, match pixels to actual blocks, and export accurate material checklists.
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("mapart")}
-                    className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
-                  >
-                    Load Map Art Calculator <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
+            {/* PLAYERS TRACKER */}
+            {activeTab === "players" && (
+              <motion.div
+                key="players"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2 }}
+              >
+                <PlayerTracker />
+              </motion.div>
+            )}
 
-                {/* Player Standings */}
-                <div className="bg-[#0d0914] border-4 border-[#221733] rounded-3xl p-6 space-y-4 hover:border-[#0055ff] transition-all duration-300 relative group shadow-xl">
-                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 border-2 border-purple-500/20 group-hover:bg-purple-500/20 transition-all">
-                    <User className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-base font-black text-white font-pixel uppercase tracking-wide">Player Tracker</h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
-                    Analyze player statistics, search custom ranks, and display high-definition 3D skin previews.
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("players")}
-                    className="text-xs font-pixel uppercase text-[#0055ff] hover:text-sky-300 flex items-center gap-1 group cursor-pointer pt-2"
-                  >
-                    Open Player Tracker <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-
-              </div>
-
-
-            </motion.div>
-          )}
-
-          {/* MAP ART CALCULATOR */}
-          {activeTab === "mapart" && (
-            <motion.div
-              key="mapart"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.2 }}
-            >
-              <MapArtCalculator 
-                initialMapArt={selectedMapArt}
-                onClearInitial={() => setSelectedMapArt(null)}
-              />
-            </motion.div>
-          )}
-
-          {/* FARM ROI CALCULATOR */}
-          {activeTab === "farms" && (
-            <motion.div
-              key="farms"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FarmCalculator />
-            </motion.div>
-          )}
-
-          {/* PLAYERS TRACKER */}
-          {activeTab === "players" && (
-            <motion.div
-              key="players"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.2 }}
-            >
-              <PlayerTracker />
-            </motion.div>
-          )}
-
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
       </main>
 
       {/* Footer styled to look like store.donutsmp.net footer */}

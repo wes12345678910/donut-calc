@@ -232,6 +232,98 @@ We analyzed your **${details.farmType || "Sugarcane"}** Farm proposal scaled to 
   res.json({ success: true, analysis: staticAnalysis });
 });
 
+// Global live chat memory storage
+interface ChatMessage {
+  id: string;
+  sender: string;
+  rank: string;
+  text: string;
+  timestamp: string;
+}
+
+const globalMessages: ChatMessage[] = [
+  {
+    id: "welcome-1",
+    sender: "Server",
+    rank: "SYSTEM",
+    text: "Welcome to the real-time global chat! Type below to chat with anyone else on the website right now.",
+    timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+  }
+];
+
+// Active visitor session tracking (username -> last active timestamp)
+const activeUsers = new Map<string, number>();
+
+// Clean up inactive sessions (older than 12 seconds)
+function updateAndGetOnlineCount(username?: string): number {
+  const now = Date.now();
+  if (username) {
+    activeUsers.set(username, now);
+  }
+  
+  for (const [user, lastSeen] of activeUsers.entries()) {
+    if (now - lastSeen > 12000) {
+      activeUsers.delete(user);
+    }
+  }
+  
+  // Always at least 1 online
+  return Math.max(1, activeUsers.size);
+}
+
+// 4. API: Live chat room - Get messages & report online heartbeat
+app.get("/api/donut/chat", (req, res) => {
+  const username = (req.query.username as string) || "Anonymous";
+  const onlineCount = updateAndGetOnlineCount(username);
+  res.json({
+    success: true,
+    messages: globalMessages,
+    onlineCount
+  });
+});
+
+// Post a new real chat message
+app.post("/api/donut/chat", (req, res) => {
+  const { username, message } = req.body;
+  if (!username || !message || !message.trim()) {
+    return res.status(400).json({ success: false, error: "Missing username or message" });
+  }
+
+  // Determine user rank based on username
+  let rank = "PLAYER";
+  const lowerUser = username.toLowerCase();
+  if (lowerUser === "drdonutt" || lowerUser === "drdonut") {
+    rank = "OWNER";
+  } else if (lowerUser === "bionic" || lowerUser === "preston" || lowerUser === "loverfella") {
+    rank = "MEDIA";
+  } else if (lowerUser.includes("admin") || lowerUser.includes("staff")) {
+    rank = "SYSTEM";
+  }
+
+  const newMsg: ChatMessage = {
+    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+    sender: username,
+    rank,
+    text: message.trim().substring(0, 150), // prevent spam/overlength
+    timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+  };
+
+  globalMessages.push(newMsg);
+
+  // Keep last 100 messages in history to prevent buffer overflow
+  if (globalMessages.length > 100) {
+    globalMessages.shift();
+  }
+
+  const onlineCount = updateAndGetOnlineCount(username);
+
+  res.json({
+    success: true,
+    message: newMsg,
+    onlineCount
+  });
+});
+
 // Integrate Vite as middleware for development, and handle production static serving
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
