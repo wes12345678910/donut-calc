@@ -1,0 +1,6 @@
+{
+  "name": "Donutcalc",
+  "description": "A retro Minecraft-styled utility companion for DonutSMP, featuring a Map Art blueprint calculator, farm profit calculators, and server player tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
