@@ -20,19 +20,26 @@ export default function LiveChat({ user }: LiveChatProps) {
   const fetchChatData = async (silent = false) => {
     try {
       const response = await fetch(`/api/donut/chat?username=${encodeURIComponent(user)}`);
-      const data = await response.json();
-      if (data.success && Array.isArray(data.messages)) {
-        setMessages(data.messages);
-        setOnlineCount(data.onlineCount);
+      if (!response.ok) {
+        return;
+      }
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (data.success && Array.isArray(data.messages)) {
+          setMessages(data.messages);
+          setOnlineCount(data.onlineCount);
 
-        // Notify with unread count if sidebar is collapsed and we got new messages
-        if (silent && isCollapsed && data.messages.length > lastMessageCountRef.current) {
-          setUnreadCount(prev => prev + (data.messages.length - lastMessageCountRef.current));
+          // Notify with unread count if sidebar is collapsed and we got new messages
+          if (silent && isCollapsed && data.messages.length > lastMessageCountRef.current) {
+            setUnreadCount(prev => prev + (data.messages.length - lastMessageCountRef.current));
+          }
+          lastMessageCountRef.current = data.messages.length;
         }
-        lastMessageCountRef.current = data.messages.length;
       }
     } catch (err) {
-      console.error("Failed to fetch live chat from server:", err);
+      // Degrade gracefully with a soft console warning instead of console.error when server is hot-reloaded
+      console.warn("Live chat fetch is temporarily offline (expected during dev server restart).");
     }
   };
 
@@ -78,13 +85,17 @@ export default function LiveChat({ user }: LiveChatProps) {
         })
       });
 
-      const data = await response.json();
-      if (data.success) {
-        // Immediately fetch the latest messages list
-        fetchChatData();
+      if (!response.ok) return;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (data.success) {
+          // Immediately fetch the latest messages list
+          fetchChatData();
+        }
       }
     } catch (err) {
-      console.error("Failed to send message to live chat api:", err);
+      console.warn("Failed to send message to live chat api:", err);
     }
   };
 
